@@ -46,5 +46,28 @@ public class Stream {
             return intArray;
         }
     }
+    public static int[] readIntArrayFromRandomAccessFile(File file, long position, int n) throws IOException {
+        int[] intArray = new int[n];
+        try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
+            randomAccessFile.seek(position*4);
+            for (int i = 0; i < n; i++) {
+                intArray[i] = randomAccessFile.readInt();
+            }
+        }
+        return intArray;
+    }
+
+    public static List<File> getFiles(File directory, String extension) {
+        List<File> filesWithExtension = new ArrayList<>();
+        File[] files = directory.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().endsWith(extension)) {
+                    filesWithExtension.add(file);
+                }
+            }
+        }
+        return filesWithExtension;
+    }
 
 }
