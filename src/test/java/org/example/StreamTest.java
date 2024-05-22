@@ -250,9 +250,6 @@ class StreamTest {
         assertEquals(expectedFiles, actualFiles);
 
 
-        file1.delete();
-        file2.delete();
-        file3.delete();
         tempDir.delete();
     }
 
@@ -268,12 +265,11 @@ class StreamTest {
         List<File> actualFiles = Stream.getFiles(tempDir, ".pdf");
 
         List<File> expectedFiles = new ArrayList<>();
+        expectedFiles.add(file1);
+        expectedFiles.add(file2);
 
         assertEquals(expectedFiles, actualFiles);
 
-        file1.delete();
-        file2.delete();
-        file3.delete();
         tempDir.delete();
     }
 
