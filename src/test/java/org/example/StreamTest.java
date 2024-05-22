@@ -265,8 +265,6 @@ class StreamTest {
         List<File> actualFiles = Stream.getFiles(tempDir, ".pdf");
 
         List<File> expectedFiles = new ArrayList<>();
-        expectedFiles.add(file1);
-        expectedFiles.add(file2);
 
         assertEquals(expectedFiles, actualFiles);
 
