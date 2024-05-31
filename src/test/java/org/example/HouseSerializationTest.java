@@ -10,10 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
 
 class HouseSerializationTest {
 
@@ -31,11 +29,10 @@ class HouseSerializationTest {
 
         assertEquals(originalHouse, deserializedHouse);
     }
+
     @Test
     void testHouseSerialization2() throws IOException, ClassNotFoundException {
-
         House originalHouse = new House("12345", "ул.Мира", null, new ArrayList<>());
-
 
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         HouseSerialization.serializeHouse(originalHouse, outputStream);
@@ -45,22 +42,21 @@ class HouseSerializationTest {
 
         assertEquals(originalHouse, deserializedHouse);
     }
-    @Test
-    void testHouseSerialization3() {
 
+    @Test
+    void testHouseSerialization3() throws IOException {
         Person person = new Person("Владимир", "Кривых", "Павлович", "30.07.2004");
         Flat flat1 = new Flat(110, 75, List.of(person));
         Flat flat2 = new Flat(111, 90, List.of());
         House originalHouse = new House("12345", "ул. Мира", person, Arrays.asList(flat1, flat2));
 
-        String json = HouseSerialization.serializeHouseGson(originalHouse);
+        String json = HouseSerialization.serializeHouseJackson(originalHouse);
 
         assertNotNull(json);
     }
 
     @Test
-    void testHouseSerialization4() {
-
+    void testHouseSerialization4() throws IOException {
         Person person = new Person("Владимир", "Кривых", "Павлович", "30.07.2004");
         Person person1 = new Person("Артем", "Бухта", "Владимирович", "29.04.2004");
 
@@ -69,16 +65,15 @@ class HouseSerializationTest {
 
         House originalHouse = new House("123456789", "ул. Мира", person, Arrays.asList(flat1, flat2));
 
-        String json = HouseSerialization.serializeHouseGson(originalHouse);
+        String json = HouseSerialization.serializeHouseJackson(originalHouse);
 
-
-        House deserializedHouse = HouseSerialization.deserializeHouseGson(json);
+        House deserializedHouse = HouseSerialization.deserializeHouseJackson(json);
 
         assertEquals(originalHouse, deserializedHouse);
     }
 
     @Test
-    void testHouseSerialization5() {
+    void testHouseSerialization5() throws IOException {
         Person person = new Person("Владимир", "Кривых", "Павлович", "30.07.2004");
         Person person1 = new Person("Артем", "Бухта", "Владимирович", "29.04.2004");
 
@@ -87,17 +82,21 @@ class HouseSerializationTest {
 
         House originalHouse = new House("12345", "ул. Мира", person, Arrays.asList(flat1, flat2));
 
-        String json = "{\"cadastralNumber\":\"12345\",\"address\":\"ул. Мира\",\"main\":{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"birthday\":\"30.07.2004\"}," +
-                "\"flats\":[{\"number\":110,\"square\":75.0,\"owners\":[{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"birthday\":\"30.07.2004\"}]},{\"number\":111,\"square\":90.0," +
-                "\"owners\":[{\"name\":\"Артем\",\"lastName\":\"Бухта\",\"middleName\":\"Владимирович\",\"birthday\":\"29.04.2004\"}]}]}";
+        String json = "{\"cadastralNumber\":\"12345\",\"address\":\"ул. Мира\",\"main\":" +
+                "{\"name\":\"Владимир\",\"lastName\":\"Кривых\"" +
+                ",\"middleName\":\"Павлович\",\"dateOfBirth\":\"30.07.2004\"}," +
+                "\"flats\":[{\"number\":110,\"square\":75.0,\"owners\":" +
+                "[{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"dateOfBirth\":\"30.07.2004\"}]}," +
+                "{\"number\":111,\"square\":90.0," + "\"owners\":[{\"name\":\"Артем\",\"lastName\":\"Бухта\",\"middleName\":" +
+                "\"Владимирович\",\"dateOfBirth\":\"29.04.2004\"}]}]}";
 
-        String serializedJson = HouseSerialization.serializeHouseGson(originalHouse);
+        String serializedJson = HouseSerialization.serializeHouseJackson(originalHouse);
 
         assertEquals(json, serializedJson);
     }
 
     @Test
-    void testHouseSerialization6() {
+    void testHouseSerialization6() throws IOException {
         Person person = new Person("Владимир", "Кривых", "Павлович", "30.07.2004");
         Person person1 = new Person("Артем", "Бухта", "Владимирович", "29.04.2004");
 
@@ -106,25 +105,29 @@ class HouseSerializationTest {
 
         House originalHouse = new House("12345", "ул. Мира", person, Arrays.asList(flat1, flat2));
 
-        String json = "{\"cadastralNumber\":\"12345\",\"address\":\"ул. Мира\",\"main\":{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"birthday\":\"30.07.2004\"}," +
-                "\"flats\":[{\"number\":110,\"square\":75.0,\"owners\":[{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"birthday\":\"30.07.2004\"}]},{\"number\":111,\"square\":90.0," +
-                "\"owners\":[{\"name\":\"Артем\",\"lastName\":\"Бухта\",\"middleName\":\"Владимирович\",\"birthday\":\"29.04.2004\"}]}]}";
+        String json = "{\"cadastralNumber\":\"12345\",\"address\":\"ул. Мира\",\"main\":{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\"," +
+                "\"dateOfBirth\":\"30.07.2004\"}," +
+                "\"flats\":[{\"number\":110,\"square\":75.0,\"owners\":[" +
+                "{\"name\":\"Владимир\",\"lastName\":\"Кривых\",\"middleName\":\"Павлович\",\"" +
+                "dateOfBirth\":\"30.07.2004\"}]}," +
+                "{\"number\":111,\"square\":90.0," + "\"owners\":" +
+                "[{\"name\":\"Артем\",\"lastName\":\"Бухта\",\"middleName\":" +
+                "\"Владимирович\",\"dateOfBirth\":\"29.04.2004\"}]}]}";
 
-
-        House deserializedHouse = HouseSerialization.deserializeHouseGson(json);
+        House deserializedHouse = HouseSerialization.deserializeHouseJackson(json);
 
         assertEquals(deserializedHouse, originalHouse);
-
     }
+
     @Test
-    void testHouseSerialization7() {
+    void testHouseSerialization7() throws IOException {
         House originalHouse = new House("", "", null, Collections.emptyList());
 
-        String json = HouseSerialization.serializeHouseGson(originalHouse);
+        String json = HouseSerialization.serializeHouseJackson(originalHouse);
 
         assertNotNull(json);
 
-        House deserializedHouse = HouseSerialization.deserializeHouseGson(json);
+        House deserializedHouse = HouseSerialization.deserializeHouseJackson(json);
 
         assertNotNull(deserializedHouse);
         assertEquals(originalHouse, deserializedHouse);

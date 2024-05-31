@@ -5,17 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Stream {
-    public static void writeIntArray(int[] intArray, DataOutputStream outputStream) throws IOException {
-        try (outputStream) {
+    public static void writeIntArray(int[] intArray, OutputStream outputStream1) throws IOException {
+        try (DataOutputStream outputStream = new DataOutputStream(outputStream1)) {
             for (int num : intArray) {
                 outputStream.writeInt(num);
             }
         }
     }
 
-    public static int[] readIntArray(DataInputStream inputStream, int n) throws IOException {
+    public static int[] readIntArray(InputStream inputStream1, int n) throws IOException {
         int[] intArray = new int[n];
-        try (inputStream) {
+        try (DataInputStream inputStream = new DataInputStream(inputStream1)) {
             for (int i = 0; i < n; i++) {
                 intArray[i] = inputStream.readInt();
             }
@@ -24,8 +24,8 @@ public class Stream {
     }
 
 
-    public static void writeIntArrayToCharacterStream(int[] intArray, BufferedWriter writer) throws IOException {
-        try (writer) {
+    public static void writeIntArrayToCharacterStream(int[] intArray, Writer writer1) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(writer1)) {
             for (int i = 0; i < intArray.length; i++) {
                 writer.write(Integer.toString(intArray[i]));
                 if (i < intArray.length - 1) {
@@ -35,8 +35,8 @@ public class Stream {
         }
     }
 
-    public static int[] readIntArrayFromCharacterStream(BufferedReader reader) throws IOException {
-        try (reader) {
+    public static int[] readIntArrayFromCharacterStream(BufferedReader reader1) throws IOException {
+        try (BufferedReader reader = new BufferedReader(reader1)) {
             String line = reader.readLine();
             String[] tokens = line.split(" ");
             int[] intArray = new int[tokens.length];
@@ -46,11 +46,13 @@ public class Stream {
             return intArray;
         }
     }
-    public static int[] readIntArrayFromRandomAccessFile(File file, long position, int n) throws IOException {
-        int[] intArray = new int[n];
+    public static int[] readIntArrayFromRandomAccessFile(File file, int position) throws IOException {
+        int[] intArray;
         try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
-            randomAccessFile.seek(position*4);
-            for (int i = 0; i < n; i++) {
+            int lengthFile = (int)randomAccessFile.length() / 4;
+            intArray = new int[lengthFile - position];
+            randomAccessFile.seek(position * 4L);
+            for (int i = 0; i < lengthFile - position; i++) {
                 intArray[i] = randomAccessFile.readInt();
             }
         }

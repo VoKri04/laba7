@@ -3,9 +3,7 @@ package org.example;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -184,9 +182,8 @@ class StreamTest {
     }
     @Test
     void testReadIntArrayFromRandomAccessFile1() {
-        File tempFile = null;
         try {
-            tempFile = File.createTempFile("test", ".dat");
+            File tempFile = new File("file.dat");
             try (RandomAccessFile randomAccessFile = new RandomAccessFile(tempFile, "rw")) {
 
                 randomAccessFile.writeInt(1);
@@ -196,22 +193,18 @@ class StreamTest {
                 randomAccessFile.writeInt(5);
             }
 
-            int[] actualArray = Stream.readIntArrayFromRandomAccessFile(tempFile, 0, 5);
+            int[] actualArray = Stream.readIntArrayFromRandomAccessFile(tempFile, 0);
 
             int[] expectedArray = {1, 2, 3, 4, 5};
 
             assertArrayEquals(expectedArray, actualArray);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (tempFile != null) tempFile.delete();
+        } catch (IOException e) {e.printStackTrace();
         }
     }
     @Test
     void testReadIntArrayFromRandomAccessFile2() {
-        File tempFile = null;
         try {
-            tempFile = File.createTempFile("test", ".dat");
+            File tempFile = new File("file.dat");
             try (RandomAccessFile randomAccessFile = new RandomAccessFile(tempFile, "rw")) {
 
                 randomAccessFile.writeInt(1);
@@ -221,25 +214,21 @@ class StreamTest {
                 randomAccessFile.writeInt(5);
             }
 
-            int[] actualArray = Stream.readIntArrayFromRandomAccessFile(tempFile, 2, 3);
+            int[] actualArray = Stream.readIntArrayFromRandomAccessFile(tempFile, 3);
 
-            int[] expectedArray = {3, 4, 5};
+            int[] expectedArray = { 4, 5};
 
             assertArrayEquals(expectedArray, actualArray);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (tempFile != null) tempFile.delete();
         }
     }
     @Test
     void testGetFiles1() throws IOException {
         File tempDir = new File("/Users/vladimirkrivyh/IdeaProjects/laba77");
-        tempDir.mkdir();
 
         File file1 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text1.rtf");
         File file2 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text2.rtf");
-        File file3 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/file3.bin");
 
         List<File> actualFiles = Stream.getFiles(tempDir, ".rtf");
 
@@ -250,13 +239,24 @@ class StreamTest {
         assertEquals(expectedFiles, actualFiles);
 
 
-        tempDir.delete();
+    }
+    @Test
+    void testGetFiles3() throws IOException {
+        File tempDir = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text1.rtf");
+
+
+        List<File> actualFiles = Stream.getFiles(tempDir, ".rtf");
+
+        List<File> expectedFiles = new ArrayList<>();
+
+        assertEquals(expectedFiles, actualFiles);
+
+
     }
 
     @Test
     void testGetFiles2() {
         File tempDir = new File("/Users/vladimirkrivyh/IdeaProjects/laba77");
-        tempDir.mkdir();
 
         File file1 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text1.rtf");
         File file2 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text2.rtf");
@@ -268,7 +268,23 @@ class StreamTest {
 
         assertEquals(expectedFiles, actualFiles);
 
-        tempDir.delete();
+    }
+    @Test
+    void testGetFiles4() {
+        File tempDir = new File("/Users/vladimirkrivyh/IdeaProjects/laba77");
+
+        File file1 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/text1.rtf");
+        File file2 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/pom.xml");
+        File file3 = new File("/Users/vladimirkrivyh/IdeaProjects/laba77/file3.bin");
+
+        List<File> actualFiles = Stream.getFiles(tempDir, ".xml");
+
+        List<File> expectedFiles = new ArrayList<>();
+
+        expectedFiles.add(file2);
+
+        assertEquals(expectedFiles, actualFiles);
+
     }
 
 }

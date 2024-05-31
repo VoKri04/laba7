@@ -3,13 +3,17 @@ package org.example;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Flat implements Serializable {
     private int number;
     private double square;
     private List<Person> owners;
 
-    public Flat(int number, double square, List<Person> owners) {
+    @JsonCreator
+    public Flat(@JsonProperty("number") int number,
+                @JsonProperty("square") double square,
+                @JsonProperty("owners") List<Person> owners) {
         this.number = number;
         this.square = square;
         this.owners = owners;

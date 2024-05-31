@@ -1,10 +1,11 @@
 package org.example;
 import java.io.*;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.*;
 
 public class HouseSerialization {
 
-    private static final Gson gson = new Gson();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
     public static void serializeHouse(House house, OutputStream outputStream) throws IOException {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
             objectOutputStream.writeObject(house);
@@ -17,13 +18,11 @@ public class HouseSerialization {
         }
     }
 
-    public static String serializeHouseGson(House house) {
-        return gson.toJson(house);
+    public static String serializeHouseJackson(House house) throws IOException {
+        return objectMapper.writeValueAsString(house);
     }
 
-    public static House deserializeHouseGson(String json) {
-        return gson.fromJson(json, House.class);
+    public static House deserializeHouseJackson(String json) throws IOException {
+        return objectMapper.readValue(json, House.class);
     }
-
-
 }

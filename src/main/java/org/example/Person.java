@@ -3,14 +3,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class Person implements Serializable {
     private String name;
     private String lastName;
     private String middleName;
     private String birthday;
 
-    public Person(String name, String lastName, String middleName, String birthday) {
+    @JsonCreator
+    public Person(@JsonProperty("name") String name,
+                  @JsonProperty("lastName") String lastName,
+                  @JsonProperty("middleName") String middleName,
+                  @JsonProperty("dateOfBirth") String birthday) {
         this.name = name;
         this.lastName = lastName;
         this.middleName = middleName;

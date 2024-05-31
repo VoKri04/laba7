@@ -3,18 +3,24 @@ package org.example;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
-
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 public class House implements Serializable {
     private String cadastralNumber;
     private String address;
     private Person main;
     private List<Flat> flats;
 
-    public House(String cadastralNumber, String address, Person main, List<Flat> flats) {
+    public House(String cadastralNumber, String address,
+                 Person main,
+                  List<Flat> flats) {
         this.cadastralNumber = cadastralNumber;
         this.address = address;
         this.main = main;
         this.flats = flats;
+    }
+    public House(){
+
     }
 
     public String getCadastralNumber() {
